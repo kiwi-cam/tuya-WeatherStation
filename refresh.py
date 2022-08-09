@@ -5,7 +5,7 @@ import datetime
 from csv import DictReader
 
 def main():
-    if len(sys.argv) != 1:
+    if len(sys.argv) == 0:
         print("This script requires one argument:")
         print("<Required> A csv file with a list of Weather Stations including DeviceID,DeviceIP,DeviceKey,Version,OutFile")
         sys.exit(1)
@@ -30,7 +30,10 @@ def main():
                           
 def get_info(Dev):
     d = tinytuya.OutletDevice(Dev['DeviceID'], Dev['DeviceIP'], Dev['DeviceKey'])
-    d.set_version(Dev['Version'] | 3.3)
+    try:
+        d.set_version(Dev['Version'])
+    except:
+        d.set_version(3.3)
     data = d.status()
     results = {
       "indoorTemp": data['dps']['131'],
