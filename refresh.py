@@ -60,3 +60,15 @@ def write_info(data):
     f.write("humidity:"+str(data['sub1Hum']))
     f.write("dewpt:"+str((data['sub1Temp']/10)-((100-data['sub1Hum'])/5)))
     f.close()
+
+def isgoodipv4(s):
+    pieces = s.split(".")
+    if len(pieces) != 4:
+        return False
+    try:
+        return all(0 <= int(p) < 256 for p in pieces)
+    except ValueError:
+        return False
+
+if __name__ == "__main__":
+    sys.exit(main())
