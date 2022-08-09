@@ -24,24 +24,24 @@ def main():
         DevList = list(dict_reader)
         
     for Dev in DevList:
-        if isgoodipv4(Dev['DeviceIP]):
+        if isgoodipv4(Dev['DeviceIP']):
             print("Processing Device "+Dev['DeviceID']+"...")
             get_info(Dev)
                           
 def get_info(Dev):
     d = tinytuya.OutletDevice(Dev['DeviceID'], Dev['DeviceIP'], Dev['DeviceKey'])
-    d.set_version(Dev['Version'] || 3.3)
+    d.set_version(Dev['Version'] | 3.3)
     data = d.status()
     results = {
-      "indoorTemp" = data['dps']['131],
-      "indoorHum" = data['dps']['132],
-      "sub1Temp" = data['dps']['133],
-      "sub1Hum" = data['dps']['134],
-      "sub2Temp" = data['dps']['135],
-      "sub2Hum" = data['dps']['136],
-      "sub3Temp" = data['dps']['135],
-      "sub3Hum" = data['dps']['136],
-      "OutFile" = Dev['OutFile']
+      "indoorTemp": data['dps']['131'],
+      "indoorHum": data['dps']['132'],
+      "sub1Temp": data['dps']['133'],
+      "sub1Hum": data['dps']['134'],
+      #"sub2Temp": data['dps']['135'],
+      #"sub2Hum": data['dps']['136'],
+      #"sub3Temp": data['dps']['135'],
+      #"sub3Hum": data['dps']['136'],
+      "OutFile": Dev['OutFile']
     }
     write_info(results)
                               
@@ -49,6 +49,14 @@ def write_info(data):
     now = datetime.datetime.now()
     f = open(data['OutFile'], "w")
     f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S"))
-    f.write("temperature:"+data['indoorTemp])
-    f.write("humidity:"+data['indoorHum])
-    f.write("dewpt:"+(data['indoorTemp]-((100-data['indoorHum])/5)))
+    f.write("temperature:"+str(data['indoorTemp']/10))
+    f.write("humidity:"+str(data['indoorHum']))
+    f.write("dewpt:"+str((data['indoorTemp']/10)-((100-data['indoorHum'])/5)))
+    f.close()
+
+    f = open('sub1'+data['OutFile'], "w")
+    f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S"))
+    f.write("temperature:"+str(data['sub1Temp']/10))
+    f.write("humidity:"+str(data['sub1Hum']))
+    f.write("dewpt:"+str((data['sub1Temp']/10)-((100-data['sub1Hum'])/5)))
+    f.close()
