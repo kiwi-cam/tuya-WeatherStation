@@ -40,14 +40,20 @@ def get_info(Dev):
     results = {
       "indoorTemp": data['dps']['131'],
       "indoorHum": data['dps']['132'],
-      "sub1Temp": data['dps']['133'],
-      "sub1Hum": data['dps']['134'],
-      #"sub2Temp": data['dps']['135'],
-      #"sub2Hum": data['dps']['136'],
-      #"sub3Temp": data['dps']['135'],
-      #"sub3Hum": data['dps']['136'],
       "OutFile": Dev['OutFile']
     }
+    if hasattr(data['dps'], '133'):
+        results['sub1Temp'] = data['dps']['133']
+    if hasattr(data['dps'], '134'):
+        results['sub1Hum'] = data['dps']['134']
+    if hasattr(data['dps'], '135'):
+        results['sub2Temp'] = data['dps']['135']
+    if hasattr(data['dps'], '136'):
+        results['sub2Hum'] = data['dps']['136']
+    if hasattr(data['dps'], '137'):
+        results['sub3Temp'] = data['dps']['137']
+    if hasattr(data['dps'], '138'):
+        results['sub3Hum'] = data['dps']['138']
     write_info(results)
                               
 def write_info(data):
@@ -59,13 +65,27 @@ def write_info(data):
     f.write("humidity:"+str(data['indoorHum'])+'\n')
     f.write("dewpt:"+str((data['indoorTemp']/10)-((100-data['indoorHum'])/5))+'\n')
     f.close()
-
-    f = open(os.path.splitext(data['OutFile'])[0]+'-sub1'+os.path.splitext(data['OutFile'])[1], "w")
-    f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S")+'\n')
-    f.write("temperature:"+str(data['sub1Temp']/10)+'\n')
-    f.write("humidity:"+str(data['sub1Hum'])+'\n')
-    f.write("dewpt:"+str((data['sub1Temp']/10)-((100-data['sub1Hum'])/5))+'\n')
-    f.close()
+    if hasattr(data, 'sub1Temp'):
+        f = open(os.path.splitext(data['OutFile'])[0]+'-sub1'+os.path.splitext(data['OutFile'])[1], "w")
+        f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S")+'\n')
+        f.write("temperature:"+str(data['sub1Temp']/10)+'\n')
+        f.write("humidity:"+str(data['sub1Hum'])+'\n')
+        f.write("dewpt:"+str((data['sub1Temp']/10)-((100-data['sub1Hum'])/5))+'\n')
+        f.close()
+    if hasattr(data, 'sub2Temp'):
+        f = open(os.path.splitext(data['OutFile'])[0]+'-sub1'+os.path.splitext(data['OutFile'])[1], "w")
+        f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S")+'\n')
+        f.write("temperature:"+str(data['sub2Temp']/10)+'\n')
+        f.write("humidity:"+str(data['sub2Hum'])+'\n')
+        f.write("dewpt:"+str((data['sub2Temp']/10)-((100-data['sub2Hum'])/5))+'\n')
+        f.close()
+    if hasattr(data, 'sub3Temp'):
+        f = open(os.path.splitext(data['OutFile'])[0]+'-sub1'+os.path.splitext(data['OutFile'])[1], "w")
+        f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S")+'\n')
+        f.write("temperature:"+str(data['sub3Temp']/10)+'\n')
+        f.write("humidity:"+str(data['sub3Hum'])+'\n')
+        f.write("dewpt:"+str((data['sub3Temp']/10)-((100-data['sub3Hum'])/5))+'\n')
+        f.close()
 
 def isgoodipv4(s):
     pieces = s.split(".")
