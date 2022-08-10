@@ -51,7 +51,7 @@ def poll_list(DevList):
         if not isgoodipv4(Dev['DeviceIP']):
             Dev['DeviceIP'] = socket.gethostbyname(Dev['DeviceIP'])
         if isgoodipv4(Dev['DeviceIP']):
-            print("Processing Device "+Dev['DeviceID']+"("+Dev['DeviceIP']+")...")
+            if not daemon: print("Processing Device "+Dev['DeviceID']+"("+Dev['DeviceIP']+")...")
             log.info("Processing Device "+Dev['DeviceID']+"("+Dev['DeviceIP']+")...")
             get_info(Dev)
         else:
@@ -65,7 +65,7 @@ def get_info(Dev):
     except:
         d.set_version(3.3)
     data = d.status()
-    print('Got data:'+str(data))
+    if not daemon: print('Got data:'+str(data))
     log.info('Got data:'+str(data))
     if 'dps' in data:
         results = {
@@ -92,7 +92,7 @@ def get_info(Dev):
         exit()    
                               
 def write_info(data):
-    print('Writing to '+data['OutFile']+' '+str(data['indoorTemp']/10)+':'+str(data['indoorHum']))
+    if not daemon: print('Writing to '+data['OutFile']+' '+str(data['indoorTemp']/10)+':'+str(data['indoorHum']))
     log.info('Writing to '+data['OutFile']+' '+str(data['indoorTemp']/10)+':'+str(data['indoorHum']))
     now = datetime.datetime.now()
     f = open(data['OutFile'], "w")
@@ -102,7 +102,7 @@ def write_info(data):
     f.write("dewpt:"+str(round((data['indoorTemp']/10)-((100-data['indoorHum'])/5),2))+'\n')
     f.close()
     if 'sub1Temp' in data:
-        print('Writing to '+os.path.splitext(data['OutFile'])[0]+'-sub1'+os.path.splitext(data['OutFile'])[1]+' '+str(data['sub1Temp']/10)+':'+str(data['sub1Hum']))
+        if not daemon: print('Writing to '+os.path.splitext(data['OutFile'])[0]+'-sub1'+os.path.splitext(data['OutFile'])[1]+' '+str(data['sub1Temp']/10)+':'+str(data['sub1Hum']))
         log.info('Writing to '+os.path.splitext(data['OutFile'])[0]+'-sub1'+os.path.splitext(data['OutFile'])[1]+' '+str(data['sub1Temp']/10)+':'+str(data['sub1Hum']))
         f = open(os.path.splitext(data['OutFile'])[0]+'-sub1'+os.path.splitext(data['OutFile'])[1], "w")
         f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S")+'\n')
@@ -111,7 +111,7 @@ def write_info(data):
         f.write("dewpt:"+str(round((data['sub1Temp']/10)-((100-data['sub1Hum'])/5),2))+'\n')
         f.close()
     if 'sub2Temp' in data:
-        print('Writing to '+os.path.splitext(data['OutFile'])[0]+'-sub2'+os.path.splitext(data['OutFile'])[1]+' '+str(data['sub2Temp']/10)+':'+str(data['sub2Hum']))
+        if not daemon: print('Writing to '+os.path.splitext(data['OutFile'])[0]+'-sub2'+os.path.splitext(data['OutFile'])[1]+' '+str(data['sub2Temp']/10)+':'+str(data['sub2Hum']))
         log.info('Writing to '+os.path.splitext(data['OutFile'])[0]+'-sub2'+os.path.splitext(data['OutFile'])[1]+' '+str(data['sub2Temp']/10)+':'+str(data['sub2Hum']))
         f = open(os.path.splitext(data['OutFile'])[0]+'-sub2'+os.path.splitext(data['OutFile'])[1], "w")
         f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S")+'\n')
@@ -120,7 +120,7 @@ def write_info(data):
         f.write("dewpt:"+str(round((data['sub2Temp']/10)-((100-data['sub2Hum'])/5),2))+'\n')
         f.close()
     if 'sub3Temp' in data:
-        print('Writing to '+os.path.splitext(data['OutFile'])[0]+'-sub3'+os.path.splitext(data['OutFile'])[1]+' '+str(data['sub3Temp']/10)+':'+str(data['sub3Hum']))
+        if not daemon: print('Writing to '+os.path.splitext(data['OutFile'])[0]+'-sub3'+os.path.splitext(data['OutFile'])[1]+' '+str(data['sub3Temp']/10)+':'+str(data['sub3Hum']))
         log.info('Writing to '+os.path.splitext(data['OutFile'])[0]+'-sub3'+os.path.splitext(data['OutFile'])[1]+' '+str(data['sub3Temp']/10)+':'+str(data['sub3Hum']))
         f = open(os.path.splitext(data['OutFile'])[0]+'-sub3'+os.path.splitext(data['OutFile'])[1], "w")
         f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S")+'\n')
