@@ -68,7 +68,7 @@ def get_info(Dev):
         write_info(results)
     else:
         print('Error getting data')
-        log.warn('Error getting data')
+        log.warning('Error getting data')
         exit()    
                               
 def write_info(data):
