@@ -75,7 +75,7 @@ def write_info(data):
         f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S")+'\n')
         f.write("temperature:"+str(data['sub1Temp']/10)+'\n')
         f.write("humidity:"+str(data['sub1Hum'])+'\n')
-        f.write("dewpt:"+str((data['sub1Temp']/10)-((100-data['sub1Hum'])/5))+'\n')
+        f.write("dewpt:"+str(round((data['sub1Temp']/10)-((100-data['sub1Hum'])/5),2))+'\n')
         f.close()
     if 'sub2Temp' in data:
         print('Writing to '+os.path.splitext(data['OutFile'])[0]+'-sub2'+os.path.splitext(data['OutFile'])[1]+' '+str(data['sub2Temp']/10)+':'+str(data['sub2Hum']))
@@ -83,7 +83,7 @@ def write_info(data):
         f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S")+'\n')
         f.write("temperature:"+str(data['sub2Temp']/10)+'\n')
         f.write("humidity:"+str(data['sub2Hum'])+'\n')
-        f.write("dewpt:"+str((data['sub2Temp']/10)-((100-data['sub2Hum'])/5))+'\n')
+        f.write("dewpt:"+str(round((data['sub2Temp']/10)-((100-data['sub2Hum'])/5),2))+'\n')
         f.close()
     if 'sub3Temp' in data:
         print('Writing to '+os.path.splitext(data['OutFile'])[0]+'-sub3'+os.path.splitext(data['OutFile'])[1]+' '+str(data['sub3Temp']/10)+':'+str(data['sub3Hum']))
@@ -91,7 +91,7 @@ def write_info(data):
         f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S")+'\n')
         f.write("temperature:"+str(data['sub3Temp']/10)+'\n')
         f.write("humidity:"+str(data['sub3Hum'])+'\n')
-        f.write("dewpt:"+str((data['sub3Temp']/10)-((100-data['sub3Hum'])/5))+'\n')
+        f.write("dewpt:"+str(round((data['sub3Temp']/10)-((100-data['sub3Hum'])/5),2))+'\n')
         f.close()
 
 def isgoodipv4(s):
