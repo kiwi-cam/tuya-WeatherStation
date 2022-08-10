@@ -37,24 +37,28 @@ def get_info(Dev):
         d.set_version(3.3)
     data = d.status()
     print('Got data:'+str(data))
-    results = {
-      "indoorTemp": data['dps']['131'],
-      "indoorHum": data['dps']['132'],
-      "OutFile": Dev['OutFile']
-    }
-    if '133' in data['dps']:
-        results['sub1Temp'] = data['dps']['133']
-    if '134' in data['dps']:
-        results['sub1Hum'] = data['dps']['134']
-    if '135' in data['dps']:
-        results['sub2Temp'] = data['dps']['135']
-    if '136' in data['dps']:
-        results['sub2Hum'] = data['dps']['136']
-    if '137' in data['dps']:
-        results['sub3Temp'] = data['dps']['137']
-    if '138' in data['dps']:
-        results['sub3Hum'] = data['dps']['138']
-    write_info(results)
+    if 'dps' in data:
+        results = {
+        "indoorTemp": data['dps']['131'],
+        "indoorHum": data['dps']['132'],
+        "OutFile": Dev['OutFile']
+        }
+        if '133' in data['dps']:
+            results['sub1Temp'] = data['dps']['133']
+        if '134' in data['dps']:
+            results['sub1Hum'] = data['dps']['134']
+        if '135' in data['dps']:
+            results['sub2Temp'] = data['dps']['135']
+        if '136' in data['dps']:
+            results['sub2Hum'] = data['dps']['136']
+        if '137' in data['dps']:
+            results['sub3Temp'] = data['dps']['137']
+        if '138' in data['dps']:
+            results['sub3Hum'] = data['dps']['138']
+        write_info(results)
+    else:
+        print('Error getting data')
+        exit()    
                               
 def write_info(data):
     print('Writing to '+data['OutFile'])
