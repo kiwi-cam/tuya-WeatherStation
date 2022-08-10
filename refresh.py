@@ -4,17 +4,25 @@ import os
 import datetime
 import time
 from csv import DictReader
+import logging
+from systemd.journal import JournalHandler
+
+log = logging.getLogger('tuya-WeatherStation')
+log.addHandler(JournalHandler())
+log.setLevel(logging.INFO)
 
 def main():
     if len(sys.argv) == 0:
         print("This script requires one argument:")
+        log.error("This script requires one argument")
         print("<Required> A csv file with a list of Weather Stations including DeviceID,DeviceIP,DeviceKey,Version,OutFile")
         sys.exit(1)
         
     DevListFile = str(sys.argv[1]).strip()
     #Test Path is Valid
     if not os.path.isfile(DevListFile):
-        print("<Invalid> The supplied csv file needs to contain a list of Weather Stations including DeviceID,DeviceIP,DeviceKey,Version,OutFile")
+        print("<Invalid> The supplied csv file needs to contain a list of Weather Stations including DeviceID,DeviceIP,DeviceKey,Version,OutFile")    
+        log.error("The supplied csv file needs to contain a list of Weather Stations")
         sys.exit(1)
         
     # open file in read mode
@@ -27,6 +35,7 @@ def main():
     for Dev in DevList:
         if isgoodipv4(Dev['DeviceIP']):
             print("Processing Device "+Dev['DeviceID']+"...")
+            log.info("Processing Device "+Dev['DeviceID']+"...")
             get_info(Dev)
                           
 def get_info(Dev):
@@ -37,6 +46,7 @@ def get_info(Dev):
         d.set_version(3.3)
     data = d.status()
     print('Got data:'+str(data))
+    log.info('Got data:'+str(data))
     if 'dps' in data:
         results = {
         "indoorTemp": data['dps']['131'],
@@ -58,10 +68,12 @@ def get_info(Dev):
         write_info(results)
     else:
         print('Error getting data')
+        log.warn('Error getting data')
         exit()    
                               
 def write_info(data):
-    print('Writing to '+data['OutFile'])
+    print('Writing to '+data['OutFile']+' '+str(data['indoorTemp']/10)+':'+str(data['indoorHum']))
+    log.info('Writing to '+data['OutFile']+' '+str(data['indoorTemp']/10)+':'+str(data['indoorHum']))
     now = datetime.datetime.now()
     f = open(data['OutFile'], "w")
     f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S")+'\n')
@@ -71,6 +83,7 @@ def write_info(data):
     f.close()
     if 'sub1Temp' in data:
         print('Writing to '+os.path.splitext(data['OutFile'])[0]+'-sub1'+os.path.splitext(data['OutFile'])[1]+' '+str(data['sub1Temp']/10)+':'+str(data['sub1Hum']))
+        log.info('Writing to '+os.path.splitext(data['OutFile'])[0]+'-sub1'+os.path.splitext(data['OutFile'])[1]+' '+str(data['sub1Temp']/10)+':'+str(data['sub1Hum']))
         f = open(os.path.splitext(data['OutFile'])[0]+'-sub1'+os.path.splitext(data['OutFile'])[1], "w")
         f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S")+'\n')
         f.write("temperature:"+str(data['sub1Temp']/10)+'\n')
@@ -79,6 +92,7 @@ def write_info(data):
         f.close()
     if 'sub2Temp' in data:
         print('Writing to '+os.path.splitext(data['OutFile'])[0]+'-sub2'+os.path.splitext(data['OutFile'])[1]+' '+str(data['sub2Temp']/10)+':'+str(data['sub2Hum']))
+        log.info('Writing to '+os.path.splitext(data['OutFile'])[0]+'-sub2'+os.path.splitext(data['OutFile'])[1]+' '+str(data['sub2Temp']/10)+':'+str(data['sub2Hum']))
         f = open(os.path.splitext(data['OutFile'])[0]+'-sub2'+os.path.splitext(data['OutFile'])[1], "w")
         f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S")+'\n')
         f.write("temperature:"+str(data['sub2Temp']/10)+'\n')
@@ -87,6 +101,7 @@ def write_info(data):
         f.close()
     if 'sub3Temp' in data:
         print('Writing to '+os.path.splitext(data['OutFile'])[0]+'-sub3'+os.path.splitext(data['OutFile'])[1]+' '+str(data['sub3Temp']/10)+':'+str(data['sub3Hum']))
+        log.info('Writing to '+os.path.splitext(data['OutFile'])[0]+'-sub3'+os.path.splitext(data['OutFile'])[1]+' '+str(data['sub3Temp']/10)+':'+str(data['sub3Hum']))
         f = open(os.path.splitext(data['OutFile'])[0]+'-sub3'+os.path.splitext(data['OutFile'])[1], "w")
         f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S")+'\n')
         f.write("temperature:"+str(data['sub3Temp']/10)+'\n')
