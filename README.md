@@ -1,5 +1,6 @@
 # tuya-WeatherStation
-A python script based on tinytuya to extract current information from Tuya Weather stations
+A python script based on tinytuya to extract current information from Tuya Weather stations. This was setup for a [qxj device](https://www.amazon.com/Wireless-Thermometer-Hygrometer-Backlight-Greenhouse/dp/B096ZV55G2/ref=cm_cr_arp_d_product_top?ie=UTF8)
+![image](https://user-images.githubusercontent.com/32912464/184027000-2e26a103-5e41-4b40-8374-31b5293b49e5.png)
 
 Requires one argument of a csv file containing information of the devices to be polled.  The file must contain these fields, including headings: DeviceID,DeviceIP,DeviceKey,Version,OutFile.
 
