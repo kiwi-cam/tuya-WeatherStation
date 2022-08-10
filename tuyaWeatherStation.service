@@ -4,8 +4,6 @@ After=syslog.target network-online.target
 
 [Service]
 Type=simple
-# Adapt this to your specific setup (could be /usr/local/bin/homebridge)
-# See comments below for more information
 ExecStart=/usr/bin/python3.7 /usr/lib/tuya-WeatherStation/refresh.py -D /etc/tuya-WeatherStation.config
 Restart=on-failure
 RestartSec=10
