@@ -42,17 +42,17 @@ def get_info(Dev):
       "indoorHum": data['dps']['132'],
       "OutFile": Dev['OutFile']
     }
-    if hasattr(data['dps'], '133'):
+    if '133' in data['dps']:
         results['sub1Temp'] = data['dps']['133']
-    if hasattr(data['dps'], '134'):
+    if '134' in data['dps']:
         results['sub1Hum'] = data['dps']['134']
-    if hasattr(data['dps'], '135'):
+    if '135' in data['dps']:
         results['sub2Temp'] = data['dps']['135']
-    if hasattr(data['dps'], '136'):
+    if '136' in data['dps']:
         results['sub2Hum'] = data['dps']['136']
-    if hasattr(data['dps'], '137'):
+    if '137' in data['dps']:
         results['sub3Temp'] = data['dps']['137']
-    if hasattr(data['dps'], '138'):
+    if '138' in data['dps']:
         results['sub3Hum'] = data['dps']['138']
     write_info(results)
                               
@@ -65,7 +65,7 @@ def write_info(data):
     f.write("humidity:"+str(data['indoorHum'])+'\n')
     f.write("dewpt:"+str((data['indoorTemp']/10)-((100-data['indoorHum'])/5))+'\n')
     f.close()
-    if hasattr(data, 'sub1Temp'):
+    if 'sub1Temp' in data:
         print('Writing to '+os.path.splitext(data['OutFile'])[0]+'-sub1'+os.path.splitext(data['OutFile'])[1])
         f = open(os.path.splitext(data['OutFile'])[0]+'-sub1'+os.path.splitext(data['OutFile'])[1], "w")
         f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S")+'\n')
@@ -73,7 +73,7 @@ def write_info(data):
         f.write("humidity:"+str(data['sub1Hum'])+'\n')
         f.write("dewpt:"+str((data['sub1Temp']/10)-((100-data['sub1Hum'])/5))+'\n')
         f.close()
-    if hasattr(data, 'sub2Temp'):
+    if 'sub2Temp' in data:
         print('Writing to '+os.path.splitext(data['OutFile'])[0]+'-sub2'+os.path.splitext(data['OutFile'])[1])
         f = open(os.path.splitext(data['OutFile'])[0]+'-sub1'+os.path.splitext(data['OutFile'])[1], "w")
         f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S")+'\n')
@@ -81,7 +81,7 @@ def write_info(data):
         f.write("humidity:"+str(data['sub2Hum'])+'\n')
         f.write("dewpt:"+str((data['sub2Temp']/10)-((100-data['sub2Hum'])/5))+'\n')
         f.close()
-    if hasattr(data, 'sub3Temp'):
+    if 'sub3Temp' in data:
         print('Writing to '+os.path.splitext(data['OutFile'])[0]+'-sub3'+os.path.splitext(data['OutFile'])[1])
         f = open(os.path.splitext(data['OutFile'])[0]+'-sub1'+os.path.splitext(data['OutFile'])[1], "w")
         f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S")+'\n')
