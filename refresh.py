@@ -8,18 +8,26 @@ from csv import DictReader
 import logging
 from systemd.journal import JournalHandler
 
+daemon = False
 log = logging.getLogger('tuya-WeatherStation')
 log.addHandler(JournalHandler(SYSLOG_IDENTIFIER='tuya-WeatherStation'))
 log.setLevel(logging.INFO)
 
 def main():
+    global daemon
     if len(sys.argv) == 0:
-        print("This script requires one argument:")
-        log.error("This script requires one argument")
+        print("This script requires at least one argument:")
+        log.error("This script requires at least one argument")
         print("<Required> A csv file with a list of Weather Stations including DeviceID,DeviceIP,DeviceKey,Version,OutFile")
+        print("<Optional> -D or --daemon will make the script run constantly, polling every 30 seconds")
         sys.exit(1)
-        
-    DevListFile = str(sys.argv[1]).strip()
+    
+    for Arg in sys.argv:
+        if Arg == '-D' or Arg == '--debug':
+            daemon = True
+        else:    
+            DevListFile = str(Arg).strip()
+
     #Test Path is Valid
     if not os.path.isfile(DevListFile):
         print("<Invalid> The supplied csv file needs to contain a list of Weather Stations including DeviceID,DeviceIP,DeviceKey,Version,OutFile")    
@@ -32,7 +40,13 @@ def main():
         dict_reader = DictReader(read_obj)
         # get a list of dictionaries from dct_reader
         DevList = list(dict_reader)
-        
+
+    poll_list(DevList)
+    while daemon:
+        time.sleep(30)
+        poll_list(DevList)        
+
+def poll_list(DevList):
     for Dev in DevList:
         if not isgoodipv4(Dev['DeviceIP']):
             Dev['DeviceIP'] = socket.gethostbyname(Dev['DeviceIP'])
