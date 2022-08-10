@@ -67,7 +67,7 @@ def write_info(data):
     f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S")+'\n')
     f.write("temperature:"+str(data['indoorTemp']/10)+'\n')
     f.write("humidity:"+str(data['indoorHum'])+'\n')
-    f.write("dewpt:"+str((data['indoorTemp']/10)-((100-data['indoorHum'])/5))+'\n')
+    f.write("dewpt:"+str(round((data['indoorTemp']/10)-((100-data['indoorHum'])/5),2))+'\n')
     f.close()
     if 'sub1Temp' in data:
         print('Writing to '+os.path.splitext(data['OutFile'])[0]+'-sub1'+os.path.splitext(data['OutFile'])[1]+' '+str(data['sub1Temp']/10)+':'+str(data['sub1Hum']))
