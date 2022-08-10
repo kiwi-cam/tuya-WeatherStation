@@ -2,6 +2,7 @@ import tinytuya
 import sys
 import os
 import datetime
+import time
 from csv import DictReader
 
 def main():
@@ -31,10 +32,11 @@ def main():
 def get_info(Dev):
     d = tinytuya.OutletDevice(Dev['DeviceID'], Dev['DeviceIP'], Dev['DeviceKey'])
     try:
-        d.set_version(Dev['Version'])
+        d.set_version(float(Dev['Version']))
     except:
         d.set_version(3.3)
     data = d.status()
+    print('Got data:'+str(data))
     results = {
       "indoorTemp": data['dps']['131'],
       "indoorHum": data['dps']['132'],
@@ -49,19 +51,20 @@ def get_info(Dev):
     write_info(results)
                               
 def write_info(data):
+    print('Writing to '+data['OutFile'])
     now = datetime.datetime.now()
     f = open(data['OutFile'], "w")
-    f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S"))
-    f.write("temperature:"+str(data['indoorTemp']/10))
-    f.write("humidity:"+str(data['indoorHum']))
-    f.write("dewpt:"+str((data['indoorTemp']/10)-((100-data['indoorHum'])/5)))
+    f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S")+'\n')
+    f.write("temperature:"+str(data['indoorTemp']/10)+'\n')
+    f.write("humidity:"+str(data['indoorHum'])+'\n')
+    f.write("dewpt:"+str((data['indoorTemp']/10)-((100-data['indoorHum'])/5))+'\n')
     f.close()
 
-    f = open('sub1'+data['OutFile'], "w")
-    f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S"))
-    f.write("temperature:"+str(data['sub1Temp']/10))
-    f.write("humidity:"+str(data['sub1Hum']))
-    f.write("dewpt:"+str((data['sub1Temp']/10)-((100-data['sub1Hum'])/5)))
+    f = open(os.path.splitext(data['OutFile'])[0]+'-sub1'+os.path.splitext(data['OutFile'])[1], "w")
+    f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S")+'\n')
+    f.write("temperature:"+str(data['sub1Temp']/10)+'\n')
+    f.write("humidity:"+str(data['sub1Hum'])+'\n')
+    f.write("dewpt:"+str((data['sub1Temp']/10)-((100-data['sub1Hum'])/5))+'\n')
     f.close()
 
 def isgoodipv4(s):
