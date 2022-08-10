@@ -66,6 +66,7 @@ def write_info(data):
     f.write("dewpt:"+str((data['indoorTemp']/10)-((100-data['indoorHum'])/5))+'\n')
     f.close()
     if hasattr(data, 'sub1Temp'):
+        print('Writing to '+os.path.splitext(data['OutFile'])[0]+'-sub1'+os.path.splitext(data['OutFile'])[1])
         f = open(os.path.splitext(data['OutFile'])[0]+'-sub1'+os.path.splitext(data['OutFile'])[1], "w")
         f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S")+'\n')
         f.write("temperature:"+str(data['sub1Temp']/10)+'\n')
@@ -73,6 +74,7 @@ def write_info(data):
         f.write("dewpt:"+str((data['sub1Temp']/10)-((100-data['sub1Hum'])/5))+'\n')
         f.close()
     if hasattr(data, 'sub2Temp'):
+        print('Writing to '+os.path.splitext(data['OutFile'])[0]+'-sub2'+os.path.splitext(data['OutFile'])[1])
         f = open(os.path.splitext(data['OutFile'])[0]+'-sub1'+os.path.splitext(data['OutFile'])[1], "w")
         f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S")+'\n')
         f.write("temperature:"+str(data['sub2Temp']/10)+'\n')
@@ -80,6 +82,7 @@ def write_info(data):
         f.write("dewpt:"+str((data['sub2Temp']/10)-((100-data['sub2Hum'])/5))+'\n')
         f.close()
     if hasattr(data, 'sub3Temp'):
+        print('Writing to '+os.path.splitext(data['OutFile'])[0]+'-sub3'+os.path.splitext(data['OutFile'])[1])
         f = open(os.path.splitext(data['OutFile'])[0]+'-sub1'+os.path.splitext(data['OutFile'])[1], "w")
         f.write("time:"+now.strftime("%Y-%m-%d %H:%M:%S")+'\n')
         f.write("temperature:"+str(data['sub3Temp']/10)+'\n')
