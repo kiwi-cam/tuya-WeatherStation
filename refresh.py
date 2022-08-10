@@ -8,7 +8,7 @@ import logging
 from systemd.journal import JournalHandler
 
 log = logging.getLogger('tuya-WeatherStation')
-log.addHandler(JournalHandler())
+log.addHandler(JournalHandler(SYSLOG_IDENTIFIER='tuya-WeatherStation'))
 log.setLevel(logging.INFO)
 
 def main():
