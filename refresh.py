@@ -1,6 +1,7 @@
 import tinytuya
 import sys
 import os
+import socket
 import datetime
 import time
 from csv import DictReader
@@ -33,11 +34,16 @@ def main():
         DevList = list(dict_reader)
         
     for Dev in DevList:
+        if not isgoodipv4(Dev['DeviceIP']):
+            Dev['DeviceIP'] = socket.gethostbyname(Dev['DeviceIP'])
         if isgoodipv4(Dev['DeviceIP']):
-            print("Processing Device "+Dev['DeviceID']+"...")
-            log.info("Processing Device "+Dev['DeviceID']+"...")
+            print("Processing Device "+Dev['DeviceID']+"("+Dev['DeviceIP']+")...")
+            log.info("Processing Device "+Dev['DeviceID']+"("+Dev['DeviceIP']+")...")
             get_info(Dev)
-                          
+        else:
+            print("Unable to resolve "+Dev['DeviceID']+" at "+Dev['DeviceIP'])
+            log.info("Unable to resolve "+Dev['DeviceID']+" at "+Dev['DeviceIP'])
+
 def get_info(Dev):
     d = tinytuya.OutletDevice(Dev['DeviceID'], Dev['DeviceIP'], Dev['DeviceKey'])
     try:
